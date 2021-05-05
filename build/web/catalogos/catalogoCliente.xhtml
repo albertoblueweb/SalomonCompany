@@ -16,12 +16,12 @@ and open the template in the editor.
     </h:head>
     <h:body>
         <h:form id="form">
-            <h2>Cliente</h2>
+            <h2>Clientes</h2>
             <p:growl id="msgs" showDetail="true"/>
             <div class="card">
                 <p:tabView id="tvCliente" >
                     <p:tab title="Panel" id="tabForm" >
-                        <p:commandButton value="Nuevo" style="margin-right:20px; font-size:19px;" action="#{clienteBean.nuevoCliente()}" update=":form:tvCliente" icon="pi pi-file-o"/>
+                        <p:commandButton value="Nuevo" style="margin-right:20px; font-size:19px;" action="#{clienteBean.nuevoCliente()}" update=":form:tvCliente" icon="pi pi-file"/>
                         <p:commandButton value="Guardar" type="Submit" style="margin-right:20px;font-size:19px;" action="#{clienteBean.guardarCliente()}" update=":form:tvCliente, :form:msgs" icon="pi pi-save" />
                         <p:commandButton value="Eliminar" style="margin-right:20px;font-size:19px;" onclick="PF('wdialogo').show();" icon="pi pi-trash" />
 
@@ -37,7 +37,7 @@ and open the template in the editor.
                             <div class="ui-g-12 ui-md-6 ui-lg-3">
                                 <span class="ui-float-label">
                                     <p:inputText id="numCliente" value="#{clienteBean.inputNumCliente}" required="true" requiredMessage="Se requiere un numero" maxlength="20"/>
-                                    <p:outputLabel for="numCliente" value="Numero"/>
+                                    <p:outputLabel for="numCliente" value="Número"/>
                                 </span>
                             </div>
                             <div class="ui-g-12 ui-md-6 ui-lg-3">
@@ -67,7 +67,7 @@ and open the template in the editor.
                             <div class="ui-g-12 ui-md-6 ui-lg-3">
                                 <span class="ui-float-label">
                                     <p:inputText id="telContacto" value="#{clienteBean.inputTelContacto}" required="true" requiredMessage="Se requiere un telefono" maxlength="20"/>
-                                    <p:outputLabel for="telContacto" value="Telefono"/>
+                                    <p:outputLabel for="telContacto" value="Télefono"/>
                                 </span>
                             </div>
                             <div class="ui-g-12 ui-md-6 ui-lg-3">
@@ -97,7 +97,7 @@ and open the template in the editor.
                             <div class="ui-g-12 ui-md-6 ui-lg-3">
                                 <span class="ui-float-label">
                                     <p:inputText id="cp" value="#{clienteBean.inputCp}" required="true" requiredMessage="Se requiere un codigo postal" maxlength="12"/>
-                                    <p:outputLabel for="cp" value="Codigo postal"/>
+                                    <p:outputLabel for="cp" value="Código postal"/>
                                 </span>
                             </div>
                             <div class="ui-g-12 ui-md-6 ui-lg-3">
@@ -150,7 +150,7 @@ and open the template in the editor.
                             <p:column headerText="Ciudad" sortBy="#{cliente.descripcionCiudad}" filterBy="#{cliente.descripcionCiudad}">
                                 <h:outputText value="#{cliente.descripcionCiudad}" />
                             </p:column>
-                            <p:column headerText="Telefono" sortBy="#{cliente.telContacto}" filterBy="#{cliente.telContacto}">
+                            <p:column headerText="Teléfono" sortBy="#{cliente.telContacto}" filterBy="#{cliente.telContacto}">
                                 <h:outputText value="#{cliente.telContacto}" />
                             </p:column>
                             <p:column headerText="RFC" sortBy="#{cliente.rfc}" filterBy="#{cliente.rfc}">
@@ -165,7 +165,7 @@ and open the template in the editor.
                             <p:column headerText="Colonia" sortBy="#{cliente.colonia}" filterBy="#{cliente.colonia}">
                                 <h:outputText value="#{cliente.colonia}" />
                             </p:column>
-                            <p:column headerText="Codigo postal" sortBy="#{cliente.cp}" filterBy="#{cliente.cp}">
+                            <p:column headerText="Código postal" sortBy="#{cliente.cp}" filterBy="#{cliente.cp}">
                                 <h:outputText value="#{cliente.cp}" />
                             </p:column>
                             <p:column headerText="Estado" sortBy="#{cliente.estado}" filterBy="#{cliente.estado == true? 'Activo' : 'Inactivo'}">
