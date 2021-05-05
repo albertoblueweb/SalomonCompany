@@ -4,12 +4,20 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
+        <style>
+            .pi-users,
+            .pi-briefcase,
+            .pi-id-card {
+                padding-right: 1rem;
+            }
+        </style>
         <title>Menu</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
@@ -18,7 +26,7 @@ and open the template in the editor.
             <p:menu style="width: 190px">
                 <p:menuitem action="#{menuBean.seleccionMenu(1)}" 
                             update="panelCenter" style="font-size:19px;">
-                    <i class="pi pi-home" ></i>
+                    <i class="pi pi-home" style="padding-right:1rem" ></i>
                     <i style="font-family: Verdana,Arial,sans-serif;">Inicio</i>
                 </p:menuitem>
                 <p:submenu label="Catalogos">
