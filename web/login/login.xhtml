@@ -33,23 +33,35 @@ and open the template in the editor.
             <div class="padre">
                 <div>
                     <p:panel header="Login" style="width:500px;">
-                        <h:graphicImage value="/imagenes/SalomonLogoCrow.png" alt="logo" width="430px"/>
+                        <h:graphicImage value="/imagenes/SalomonLogoCrow.png" 
+                                        alt="logo" width="430px"/>
                         <h:panelGrid columns="2" cellpadding="5" style="margin: 0 auto;">
 
                             <h:outputLabel for="username" value="Usuario:" />
-                            <p:inputText value="#{loginBean.inputUsuario}" id="username" required="true" requiredMessage="Es necesario un usuario" label="username" maxlength="20"/>
+                            <p:inputText value="#{loginBean.inputUsuario}" id="username" 
+                                         required="true" requiredMessage="Es necesario un usuario" 
+                                         label="username" maxlength="20"/>
+                            
                             <h:outputLabel for="password" value="Contraseña:" />
-                            <p:password value="#{loginBean.inputPassword}" id="password" required="true" requiredMessage="Es nesesario una contraseña" label="password" maxlength="12"/>
+                            <p:password value="#{loginBean.inputPassword}" id="password" 
+                                        required="true" requiredMessage="Es nesesario una contraseña" 
+                                        label="password" maxlength="12"/>
 
-                            <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"  />
+                            <p:ajaxStatus onstart="PF('statusDialog').show()" 
+                                          onsuccess="PF('statusDialog').hide()"  />
 
-                            <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false" >
-                                <p:graphicImage value="/imagenes/load.gif" width="60px"/><br/>
+                            <p:dialog widgetVar="statusDialog" modal="true" 
+                                      draggable="false" closable="false" 
+                                      resizable="false" showHeader="false" >
+                                <p:graphicImage value="/imagenes/load.gif" width="50px"/>
+                                <br/>
                                 <h:outputLabel value="Cargando..." />
                             </p:dialog>
 
                             <f:facet name="footer">
-                                <p:commandButton id="loginButton" value="Login" update=":mensajes"  action="#{loginBean.irIndex()}" icon="fa fa-sign-in" style="font-size:19px;"/>
+                                <p:commandButton id="loginButton" value="Login" 
+                                                 update=":mensajes"  action="#{loginBean.irIndex()}" 
+                                                 icon="fa fa-sign-in" style="font-size:19px;"/>
                             </f:facet>
                         </h:panelGrid>
                     </p:panel>

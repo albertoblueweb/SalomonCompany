@@ -35,8 +35,10 @@ and open the template in the editor.
             <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"  />
 
             <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false" >
-                <p:graphicImage value="/imagenes/load.gif" width="60px" style=" margin-left: 20px"/><br/>
-                <h:outputLabel value="Cargando..." />
+                <div align="center">
+                    <p:graphicImage value="/imagenes/load.gif" width="60px" style="margin-right: 10px"/><br/>
+                    <h:outputLabel value="Cargando..." style="margin-left: 5px"/>
+                </div>
             </p:dialog>
         </form>
         <p:idleMonitor timeout="60000">
@@ -53,7 +55,7 @@ and open the template in the editor.
         </p:dialog>
 
         <p:layout fullPage="true" >
-            
+
             <p:layoutUnit position="west" size="250">
                 <h:form>
                     <ui:include src="/menu/menu.xhtml"/>

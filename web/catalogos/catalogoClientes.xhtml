@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Catalogo Clientes</title>
+    </h:head>
+    <h:body>
+        <h:form id="formClientes">
+            <h2>Cliente</h2>
+            <p:growl id="msgs" showDetail="true"/>
+            <div class="card">                
+                <p:dataTable id="tableCliente" var="cliente" value="#{clienteBean.listaCliente}" 
+                             selection="#{clienteBean.seleccionCliente}" rowKey="#{cliente.idCliente}"
+                             paginator="true" rows="5" sortMode="single" widgetVar="clienteTabla" >
+                    <p:column selectionMode="single" style="width:16px;text-align:center"/>
+
+                    <p:column headerText="Código">
+                        <h:outputText value="#{cliente.idCliente}" />
+                    </p:column>
+
+                    <p:column headerText="Número cliente" sortBy="#{cliente.numCliente}" 
+                              filterBy="#{cliente.numCliente}">
+                        <h:outputText value="#{cliente.numCliente}" />
+                    </p:column>
+
+                    <p:column headerText="Nombre cliente" sortBy="#{cliente.nombreCliente}" 
+                              filterBy="#{cliente.nombreCliente}">
+                        <h:outputText value="#{cliente.nombreCliente}" />
+                    </p:column>
+
+                    <p:column headerText="Nombre distribuidor" sortBy="#{cliente.nombreDistribuidor}" 
+                              filterBy="#{cliente.nombreDistribuidor}">
+                        <h:outputText value="#{cliente.nombreDistribuidor}" />
+                    </p:column>
+
+                    <p:column headerText="Ciudad" sortBy="#{cliente.descripcionCiudad}" 
+                              filterBy="#{cliente.descripcionCiudad}">
+                        <h:outputText value="#{cliente.descripcionCiudad}" />
+                    </p:column>
+
+                    <p:column headerText="Telefono" sortBy="#{cliente.telContacto}" 
+                              filterBy="#{cliente.telContacto}">
+                        <h:outputText value="#{cliente.telContacto}" />
+                    </p:column>
+
+                    <p:column headerText="RFC" sortBy="#{cliente.rfc}" 
+                              filterBy="#{cliente.rfc}">
+                        <h:outputText value="#{cliente.rfc}" />
+                    </p:column>
+
+                    <p:column headerText="Calle" sortBy="#{cliente.calle}" 
+                              filterBy="#{cliente.calle}">
+                        <h:outputText value="#{cliente.calle}" />
+                    </p:column>
+
+                    <p:column headerText="Num. Ext." sortBy="#{cliente.numExt}" 
+                              filterBy="#{cliente.numExt}">
+                        <h:outputText value="#{cliente.numExt}" />
+                    </p:column>
+
+                    <p:column headerText="Colonia" sortBy="#{cliente.colonia}" 
+                              filterBy="#{cliente.colonia}">
+                        <h:outputText value="#{cliente.colonia}" />
+                    </p:column>
+
+                    <p:column headerText="Codigo postal" sortBy="#{cliente.cp}" 
+                              filterBy="#{cliente.cp}">
+                        <h:outputText value="#{cliente.cp}" />
+                    </p:column>
+
+                    <p:column headerText="Estado" sortBy="#{cliente.estado}" 
+                              filterBy="#{cliente.estado == true? 'Activo' : 'Inactivo'}">
+                        <h:outputText value="#{cliente.estado == true? 'Activo' : 'Inactivo'}" />
+                    </p:column>
+                </p:dataTable>
+                
+                <f:facet name="footer">
+                    <p:commandButton value="Nuevo" style="margin-right:20px; font-size:19px;" 
+                                     action="#{clienteBean.nuevoCliente()}" 
+                                     update=":form:tvCliente" icon="pi pi-file-o"/>
+                    <p:commandButton value="Guardar" type="Submit" style="margin-right:20px;font-size:19px;" action="#{clienteBean.guardarCliente()}" update=":form:tvCliente, :form:msgs" icon="pi pi-save" />
+                    <p:commandButton value="Eliminar" style="margin-right:20px;font-size:19px;" onclick="PF('wdialogo').show();" icon="pi pi-trash" />
+                </f:facet>
+                
+                <p:dialog id="dialogoEliminar" widgetVar="wdialogo" header="Confirmar Eliminación" height="80" width="350">
+                    <p:commandButton value="Aceptar" ajax="false" action="#{clienteBean.eliminarCliente()}" update=":form:tvCliente, :form:msgs" oncomplete="PF('wdialogo').hide();" style="font-size:19px;"/>
+                    <p:commandButton value="Cancelar" icon="ui-icon-close" immediate="true" onclick="PF('wdialogo').hide();" style="font-size:19px;"/>
+
+                </p:dialog>
+            </div>
+
+        </h:form>
+    </h:body>
+</html>
