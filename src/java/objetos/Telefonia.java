@@ -1,17 +1,11 @@
 package objetos;
 
-import java.io.Serializable;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-
 /**
  *
  * @author Benjamin Michel 
  * 2021-04-16
  */
-@ManagedBean
-@ViewScoped
-public class Telefonia implements Serializable {
+public class Telefonia {
 
     private int idTelefonia;
     private String descripcion;

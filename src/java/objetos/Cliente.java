@@ -1,17 +1,11 @@
 
 package objetos;
 
-import java.io.Serializable;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-
 /**
  *
  * @author Benjamin Michel 2021-04-23
  */
-@ManagedBean
-@ViewScoped
-public class Cliente implements Serializable {
+public class Cliente{
 
     private int idCliente;
     private String numCliente;

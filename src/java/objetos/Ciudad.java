@@ -1,18 +1,13 @@
 
 package objetos;
 
-import java.io.Serializable;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-
 /**
  *
  * @author Benjamin Michel
  * 2021-04-23
  */
-@ManagedBean
-@ViewScoped
-public class Ciudad implements Serializable {
+
+public class Ciudad{
 
     private int idCiudad;
     private String descripcionCiudad;

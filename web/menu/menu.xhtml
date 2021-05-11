@@ -11,35 +11,37 @@ and open the template in the editor.
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <style>
-            .pi-users,
-            .pi-briefcase,
-            .pi-id-card {
-                padding-right: 1rem;
-            }
-        </style>
-        <title>Menu</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
     </h:head>
     <h:body>
-            <p:menu style="width: 190px">
-                <p:menuitem action="#{menuBean.seleccionMenu(1)}" 
-                            update="panelCenter" style="font-size:19px;">
-                    <i class="pi pi-home" style="padding-right:1rem" ></i>
-                    <i style="font-family: Verdana,Arial,sans-serif;">Inicio</i>
+        <p:panelMenu style="width:240px">
+            <p:submenu label="Catalogos">
+                <p:menuitem value="Clientes" icon="ui-icon-person" 
+                            action="#{menuBean.seleccionMenu(2)}" 
+                            update="panelCenter"/>
+
+                <p:menuitem value="Distribuidores" icon="ui-icon-suitcase" 
+                            action="#{menuBean.seleccionMenu(3)}" 
+                            update="panelCenter" />
+
+                <p:menuitem value="Telefonía" icon="ui-icon-bookmark" 
+                            action="#{menuBean.seleccionMenu(4)}" 
+                            update="panelCenter" />
+
+                <p:menuitem value="Accesos" icon="ui-icon-key" 
+                            action="#{menuBean.seleccionMenu(5)}" 
+                            update="panelCenter" />
+                
+                <p:menuitem value="Perfiles" icon="ui-icon-key" 
+                            action="#{menuBean.seleccionMenu(6)}" 
+                            update="panelCenter" />
+            </p:submenu>
+            
+            <p:submenu label="Sesión">
+                <p:menuitem value="Inicio" action="#{menuBean.seleccionMenu(1)}" 
+                            update="panelCenter" icon="ui-icon-home">
                 </p:menuitem>
-                <p:submenu label="Catalogos">
-                    <p:menuitem value=" Clientes" icon="pi pi-users" 
-                                action="#{menuBean.seleccionMenu(2)}" 
-                                update="panelCenter" style="font-size:19px;"/>
-                    <p:menuitem value=" Distribuidores" icon="pi pi-briefcase" 
-                                action="#{menuBean.seleccionMenu(3)}" 
-                                update="panelCenter" style="font-size:19px;"/>
-                    <p:menuitem value=" Telefonía" icon="pi pi-id-card" 
-                                action="#{menuBean.seleccionMenu(4)}" 
-                                update="panelCenter" style="font-size:19px;"/>
-                </p:submenu>
-            </p:menu>
+            </p:submenu>
+        </p:panelMenu>
     </h:body>
 </html>

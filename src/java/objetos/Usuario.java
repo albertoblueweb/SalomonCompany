@@ -1,18 +1,12 @@
 package objetos;
 
-import java.io.Serializable;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-
 /**
  *
  * @author Benjamin michel
  * 2021-04-15
  */
 
-@ManagedBean
-@ViewScoped
-public class Usuario implements Serializable {
+public class Usuario {
     private int idUsuario;
     private String usuario;
     private String nombreUsuario;

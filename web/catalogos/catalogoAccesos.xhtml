@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Catálogo Accesos</title>
+    </h:head>
+    <h:body>
+        <h:form id="mainForm">
+            <p:growl id="msjs" showDetail="true"/>
+            <p:dataTable id="dtAccesos" var="accesos" value="#{accesosBean.listaAccesos}" 
+                         selectionMode="single"
+                         selection="#{accesosBean.selectedAcceso}" 
+                         rowKey="#{accesos.idAcceso}" paginator="true" rows="10">
+
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{accesos.nombreAcceso}" />
+                </p:column>
+
+                <p:column headerText="Orden">
+                    <h:outputText value="#{accesos.orden}" />
+                </p:column>
+
+                <p:column headerText="Estatus">
+                    <h:outputText value="#{accesos.activo == true? 'Activo' : 'Inactivo'}" />
+                </p:column>
+
+                <f:facet name="footer">
+                    <p:commandButton value="Nuevo" type="button" onclick="PF('dlg').show()" 
+                                     icon="ui-icon-plus"/>
+
+                    <p:commandButton value="Modificar" onclick="PF('dlg2').show()"
+                                     process="dtAccesos" update=":mainForm:panelModify"
+                                     style="margin-left: 5px" icon="ui-icon-pencil"/>
+
+                    <p:commandButton value="Eliminar" onclick="PF('dlg3').show()"
+                                     process="dtAccesos" update=":mainForm:dtAccesosDel"
+                                     style="margin-left: 5px" icon="ui-icon-trash"/>
+                </f:facet>
+
+            </p:dataTable>
+
+            <p:dialog header="Modificar Acceso" widgetVar="dlg2" >
+                <h:panelGrid id="panelModify" columns="2">
+                    <p:outputLabel value="Nombre"/>
+                    <p:inputText value="#{accesosBean.selectedAcceso.nombreAcceso}"
+                                 />
+
+                    <p:outputLabel value="Orden"/>
+                    <p:inputText value="#{accesosBean.selectedAcceso.orden}"
+                                 />
+                </h:panelGrid>
+
+                <p:commandButton value="Guardar" action="#{accesosBean.modificaAcceso()}"
+                                 oncomplete="PF('dlg2').hide()" icon="ui-icon-disk"
+                                 update=":mainForm:dtAccesos msjs"/>
+            </p:dialog>
+
+            <p:dialog header="Eliminar Acceso" widgetVar="dlg3" >
+                <p:outputLabel value="Se eliminará el siguiente registro:"/>
+                                
+                <p:dataTable id="dtAccesosDel" var="accesosDel" 
+                             value="#{accesosBean.selectedAcceso}" style="margin-top: 8px;
+                             margin-bottom: 8px">
+
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{accesosDel.nombreAcceso}" />
+                    </p:column>
+
+                    <p:column headerText="Orden">
+                        <h:outputText value="#{accesosDel.orden}" />
+                    </p:column>
+
+                    <p:column headerText="Estatus">
+                        <h:outputText value="#{accesosDel.activo == true? 'Activo' : 'Inactivo'}" />
+                    </p:column>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Aceptar" action="#{accesosBean.eliminaAcceso()}"
+                                         oncomplete="PF('dlg3').hide()" icon="ui-icon-trash"
+                                         update=":mainForm:dtAccesos :mainForm:msjs"/>
+                    </f:facet>
+                </p:dataTable>
+            </p:dialog>
+        </h:form>
+
+        <p:dialog header="Nuevo Acceso" widgetVar="dlg" >
+            <h:form>
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="Nombre"/>
+                    <p:inputText value="#{accesosBean.acceso.nombreAcceso}"
+                                 />
+
+                    <p:outputLabel value="Orden"/>
+                    <p:inputText value="#{accesosBean.acceso.orden}"
+                                 />
+                </h:panelGrid>
+
+                <p:commandButton value="Guardar" action="#{accesosBean.guardaAcceso()}"
+                                 oncomplete="PF('dlg').hide()" icon="ui-icon-disk"
+                                 update=":mainForm:dtAccesos :mainForm:msjs"/>
+
+            </h:form>
+        </p:dialog>
+    </h:body>
+</html>

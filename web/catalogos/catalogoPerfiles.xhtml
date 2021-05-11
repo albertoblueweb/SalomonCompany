@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Catálogo Perfiles</title>
+    </h:head>
+    <h:body>
+        <h:form id="mainFormPerfiles">
+            <p:growl id="msjs2" showDetail="true"/>
+            <p:dataTable id="dtPerfiles" var="perfiles" value="#{perfilesBean.listaPerfiles}" 
+                         selectionMode="single"
+                         selection="#{perfilesBean.selectedPerfil}" 
+                         rowKey="#{perfiles.idPerfil}" paginator="true" rows="10">
+
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{perfiles.nombrePerfil}" />
+                </p:column>
+
+                <p:column headerText="Descripción">
+                    <h:outputText value="#{perfiles.descripcion}" />
+                </p:column>
+
+                <p:column headerText="Estatus">
+                    <h:outputText value="#{perfiles.activo == true? 'Activo' : 'Inactivo'}" />
+                </p:column>
+
+                <f:facet name="footer">
+                    <p:commandButton value="Nuevo" type="button" onclick="PF('dlg').show()" 
+                                     icon="ui-icon-plus"/>
+
+                    <p:commandButton value="Modificar" onclick="PF('dlg2').show()"
+                                     process="dtPerfiles" update=":mainFormPerfiles:panelModify"
+                                     style="margin-left: 5px" icon="ui-icon-pencil"/>
+
+                    <p:commandButton value="Eliminar" onclick="PF('dlg3').show()"
+                                     process="dtPerfiles" update=":mainFormPerfiles:dtPefilesDel"
+                                     style="margin-left: 5px" icon="ui-icon-trash"/>
+                </f:facet>
+
+            </p:dataTable>
+
+            <p:dialog header="Modificar Acceso" widgetVar="dlg2" >
+                <h:panelGrid id="panelModify" columns="2">
+                    <p:outputLabel value="Nombre: "/>
+                    <p:inputText value="#{perfilesBean.selectedPerfil.nombrePerfil}"
+                                 />
+
+                    <p:outputLabel value="Descripción: "/>
+                    <p:inputText value="#{perfilesBean.selectedPerfil.descripcion}"
+                                 />
+                </h:panelGrid>
+
+                <p:commandButton value="Guardar" action="#{accesosBean.modificaAcceso()}"
+                                 oncomplete="PF('dlg2').hide()" icon="ui-icon-disk"
+                                 update=":mainFormPerfiles:dtPerfiles"/>
+            </p:dialog>
+
+            <p:dialog header="Eliminar Acceso" widgetVar="dlg3" >
+                <p:outputLabel value="Se eliminará el siguiente registro:"/>
+
+                <p:dataTable id="dtPefilesDel" var="perfilesDel" 
+                             value="#{perfilesBean.selectedPerfil}" style="margin-top: 8px;
+                             margin-bottom: 8px">
+
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{perfilesDel.nombrePerfil}" />
+                    </p:column>
+
+                    <p:column headerText="Descripción">
+                        <h:outputText value="#{perfilesDel.descripcion}" />
+                    </p:column>
+
+                    <p:column headerText="Estatus">
+                        <h:outputText value="#{perfilesDel.activo == true? 'Activo' : 'Inactivo'}" />
+                    </p:column>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Aceptar" action="#{accesosBean.eliminaAcceso()}"
+                                         oncomplete="PF('dlg3').hide()" icon="ui-icon-trash"
+                                         update=":mainFormPerfiles:dtPerfiles"/>
+                    </f:facet>
+                </p:dataTable>
+            </p:dialog>
+        </h:form>
+
+        <p:dialog header="Nuevo Acceso" widgetVar="dlg" >
+            <h:form>
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="Nombre"/>
+                    <p:inputText value="#{perfilesBean.perfil.nombrePerfil}"
+                                 />
+
+                    <p:outputLabel value="Descripción"/>
+                    <p:inputText value="#{perfilesBean.perfil.descripcion}"
+                                 />
+                </h:panelGrid>
+
+                <h3 style="margin-top: 0">Basic PickList</h3>
+                <p:pickList id="pickList" value="#{perfilesBean.listaAccesosDual}" var="accesosD" 
+                            itemLabel="#{accesosD.nombreAcceso}" itemValue="#{accesosD.idAcceso}" >
+                    <p:ajax event="transfer" listener="#{perfilesBean.onTransfer}" 
+                        update=":mainFormPerfiles:msjs2"/>
+                    
+                    <f:facet name="sourceCaption">Accesos</f:facet>
+                    <f:facet name="targetCaption">Accesos Seleccionados</f:facet>
+                    
+                </p:pickList>                        
+
+                <p:commandButton value="Guardar" action="#{perfilesBean.guardaPerfil()}"
+                                 oncomplete="PF('dlg').hide()" icon="ui-icon-disk"
+                                 update=":mainFormPerfiles:dtPerfiles :mainFormPerfiles:msjs2"/>
+
+            </h:form>
+        </p:dialog>
+
+    </h:body>
+</html>
