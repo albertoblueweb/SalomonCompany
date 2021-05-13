@@ -13,9 +13,13 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import entidades.SAccesos;
+import entidades.SPerfiles;
 import entidades.SPerfilesAccesos;
 import entidades.SPerfilesAccesosPK;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import utils.LocalEntityManagerFactory;
@@ -29,7 +33,6 @@ public class SPerfilesAccesosJpaController implements Serializable {
     public SPerfilesAccesosJpaController() {
         this.emf = LocalEntityManagerFactory.getEntityManagerFactory();
     }
-    
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -51,10 +54,19 @@ public class SPerfilesAccesosJpaController implements Serializable {
                 SAccesos = em.getReference(SAccesos.getClass(), SAccesos.getIdAcceso());
                 SPerfilesAccesos.setSAccesos(SAccesos);
             }
+            SPerfiles SPerfiles = SPerfilesAccesos.getSPerfiles();
+            if (SPerfiles != null) {
+                SPerfiles = em.getReference(SPerfiles.getClass(), SPerfiles.getIdPerfil());
+                SPerfilesAccesos.setSPerfiles(SPerfiles);
+            }
             em.persist(SPerfilesAccesos);
             if (SAccesos != null) {
                 SAccesos.getSPerfilesAccesosCollection().add(SPerfilesAccesos);
                 SAccesos = em.merge(SAccesos);
+            }
+            if (SPerfiles != null) {
+                SPerfiles.getSPerfilesAccesosCollection().add(SPerfilesAccesos);
+                SPerfiles = em.merge(SPerfiles);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -79,9 +91,15 @@ public class SPerfilesAccesosJpaController implements Serializable {
             SPerfilesAccesos persistentSPerfilesAccesos = em.find(SPerfilesAccesos.class, SPerfilesAccesos.getSPerfilesAccesosPK());
             SAccesos SAccesosOld = persistentSPerfilesAccesos.getSAccesos();
             SAccesos SAccesosNew = SPerfilesAccesos.getSAccesos();
+            SPerfiles SPerfilesOld = persistentSPerfilesAccesos.getSPerfiles();
+            SPerfiles SPerfilesNew = SPerfilesAccesos.getSPerfiles();
             if (SAccesosNew != null) {
                 SAccesosNew = em.getReference(SAccesosNew.getClass(), SAccesosNew.getIdAcceso());
                 SPerfilesAccesos.setSAccesos(SAccesosNew);
+            }
+            if (SPerfilesNew != null) {
+                SPerfilesNew = em.getReference(SPerfilesNew.getClass(), SPerfilesNew.getIdPerfil());
+                SPerfilesAccesos.setSPerfiles(SPerfilesNew);
             }
             SPerfilesAccesos = em.merge(SPerfilesAccesos);
             if (SAccesosOld != null && !SAccesosOld.equals(SAccesosNew)) {
@@ -91,6 +109,14 @@ public class SPerfilesAccesosJpaController implements Serializable {
             if (SAccesosNew != null && !SAccesosNew.equals(SAccesosOld)) {
                 SAccesosNew.getSPerfilesAccesosCollection().add(SPerfilesAccesos);
                 SAccesosNew = em.merge(SAccesosNew);
+            }
+            if (SPerfilesOld != null && !SPerfilesOld.equals(SPerfilesNew)) {
+                SPerfilesOld.getSPerfilesAccesosCollection().remove(SPerfilesAccesos);
+                SPerfilesOld = em.merge(SPerfilesOld);
+            }
+            if (SPerfilesNew != null && !SPerfilesNew.equals(SPerfilesOld)) {
+                SPerfilesNew.getSPerfilesAccesosCollection().add(SPerfilesAccesos);
+                SPerfilesNew = em.merge(SPerfilesNew);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -125,6 +151,11 @@ public class SPerfilesAccesosJpaController implements Serializable {
             if (SAccesos != null) {
                 SAccesos.getSPerfilesAccesosCollection().remove(SPerfilesAccesos);
                 SAccesos = em.merge(SAccesos);
+            }
+            SPerfiles SPerfiles = SPerfilesAccesos.getSPerfiles();
+            if (SPerfiles != null) {
+                SPerfiles.getSPerfilesAccesosCollection().remove(SPerfilesAccesos);
+                SPerfiles = em.merge(SPerfiles);
             }
             em.remove(SPerfilesAccesos);
             em.getTransaction().commit();
@@ -179,6 +210,40 @@ public class SPerfilesAccesosJpaController implements Serializable {
         } finally {
             em.close();
         }
+    }
+    
+    /**
+     * Realiza una busqueda en donde obtengo los objetos SPerfilesAccesos que cumplan
+     * con el perfil y el acceso del perfil seleccionado  
+     * @param perfil trae los datos del perfil seleccionado
+     * @param acceso trae los datos del acceso que quiero quitarle al perfil
+     * @return regresa un unico elemento SPerfilesAccesos 
+     */
+    public SPerfilesAccesos traerAccesosByPerfilAndAccesos (SPerfiles perfil, SAccesos acceso) {
+        List<SPerfilesAccesos> perfilAccesos = new ArrayList<>();
+        SPerfilesAccesos resultado = new SPerfilesAccesos();
+
+        if (perfil != null && acceso != null) {
+
+            //SELECT r FROM RPerfilAcceso r WHERE r.rPerfilAccesoPK.idPerfil = :idPerfil
+            EntityManager em = getEntityManager();
+            Query query = null;
+            try {
+
+                query = em.createNamedQuery("SPerfilesAccesos.findByIdPerfilAndAcceso", 
+                        SPerfilesAccesos.class).setParameter("idPerfil", perfil.getIdPerfil());
+                query.setParameter("idAcceso", acceso.getIdAcceso());
+                perfilAccesos = query.getResultList();
+                for(SPerfilesAccesos item : perfilAccesos){
+                    resultado = item;
+                }
+
+            } catch (Exception ex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return resultado;
+
     }
     
 }

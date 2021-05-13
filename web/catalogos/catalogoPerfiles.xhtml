@@ -37,34 +37,88 @@ and open the template in the editor.
                     <p:commandButton value="Nuevo" type="button" onclick="PF('dlg').show()" 
                                      icon="ui-icon-plus"/>
 
-                    <p:commandButton value="Modificar" onclick="PF('dlg2').show()"
-                                     process="dtPerfiles" update=":mainFormPerfiles:panelModify"
+                    <p:commandButton value="Modificar" actionListener="#{perfilesBean.traerAccesosPerfil()}"
+                                     update=":modifyForm" onclick="PF('dlg2').show()"
                                      style="margin-left: 5px" icon="ui-icon-pencil"/>
 
                     <p:commandButton value="Eliminar" onclick="PF('dlg3').show()"
-                                     process="dtPerfiles" update=":mainFormPerfiles:dtPefilesDel"
+                                     process="dtPerfiles" update=":deleteForm"
                                      style="margin-left: 5px" icon="ui-icon-trash"/>
                 </f:facet>
+            </p:dataTable>            
+        </h:form>
 
-            </p:dataTable>
+        <p:dialog header="Nuevo Perfil" widgetVar="dlg" >
+            <h:form>
+                <div align="center">
+                    <h:panelGrid columns="2" style="margin-bottom: 10px">
+                        <p:outputLabel value="Nombre" style="max-width: 100%"/>
+                        <p:inputText value="#{perfilesBean.perfil.nombrePerfil}"
+                                     validatorMessage="Carácter inválido"
+                                     maxlength="50">
+                            <f:validateRegex pattern="[A-Za-zÁ-ÿ0-9 ]+"/>
+                        </p:inputText>
 
-            <p:dialog header="Modificar Acceso" widgetVar="dlg2" >
-                <h:panelGrid id="panelModify" columns="2">
-                    <p:outputLabel value="Nombre: "/>
-                    <p:inputText value="#{perfilesBean.selectedPerfil.nombrePerfil}"
-                                 />
+                        <p:outputLabel value="Descripción" style="max-width: 100%"/>
+                        <p:inputText value="#{perfilesBean.perfil.descripcion}"
+                                     validatorMessage="Carácter inválido"
+                                     maxlength="50">
+                            <f:validateRegex pattern="[A-Za-zÁ-ÿ0-9 ]+"/>
+                        </p:inputText>
+                    </h:panelGrid>
+                </div>
 
-                    <p:outputLabel value="Descripción: "/>
-                    <p:inputText value="#{perfilesBean.selectedPerfil.descripcion}"
-                                 />
-                </h:panelGrid>
+                <p:pickList id="pickList" value="#{perfilesBean.listaAccesosDual}" var="accesosD" 
+                            itemLabel="#{accesosD.nombreAcceso}" itemValue="#{accesosD}">              
 
-                <p:commandButton value="Guardar" action="#{accesosBean.modificaAcceso()}"
-                                 oncomplete="PF('dlg2').hide()" icon="ui-icon-disk"
-                                 update=":mainFormPerfiles:dtPerfiles"/>
-            </p:dialog>
+                    <f:facet name="sourceCaption">Accesos</f:facet>
+                    <f:facet name="targetCaption">Accesos Seleccionados</f:facet>                    
+                </p:pickList>                        
 
-            <p:dialog header="Eliminar Acceso" widgetVar="dlg3" >
+                <p:commandButton value="Guardar" action="#{perfilesBean.guardaPerfil()}"
+                                 icon="ui-icon-disk"
+                                 style="margin-top: 10px; margin-bottom: 5px"
+                                 update=":mainFormPerfiles:dtPerfiles :mainFormPerfiles:msjs2"/>
+
+            </h:form>
+        </p:dialog>
+
+        <p:dialog header="Modificar Perfil" widgetVar="dlg2" >
+            <h:form id="modifyForm">
+                <div align="center">
+                    <h:panelGrid id="panelModify" columns="2" style="margin-bottom: 10px">
+                        <p:outputLabel value="Nombre: "/>
+                        <p:inputText value="#{perfilesBean.selectedPerfil.nombrePerfil}"
+                                     validatorMessage="Carácter inválido"
+                                     maxlength="50">
+                            <f:validateRegex pattern="[A-Za-zÁ-ÿ0-9 ]+"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Descripción: "/>
+                        <p:inputText value="#{perfilesBean.selectedPerfil.descripcion}"
+                                     validatorMessage="Carácter inválido"
+                                     maxlength="50">
+                            <f:validateRegex pattern="[A-Za-zÁ-ÿ0-9 ]+"/>
+                        </p:inputText>
+                    </h:panelGrid>
+                </div>
+
+                <p:pickList id="pickList2" value="#{perfilesBean.accesosDLM}" var="accesosDual" 
+                            itemLabel="#{accesosDual.nombreAcceso}" itemValue="#{accesosDual.idAcceso}">              
+
+                    <f:facet name="sourceCaption">Accesos</f:facet>
+                    <f:facet name="targetCaption">Accesos Seleccionados</f:facet>                    
+                </p:pickList>                        
+
+                <p:commandButton value="Guardar" action="#{perfilesBean.modificaPerfil()}"
+                                 icon="ui-icon-disk"
+                                 style="margin-top: 10px; margin-bottom: 5px"
+                                 update=":mainFormPerfiles"/>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog header="Eliminar Perfil" widgetVar="dlg3" >
+            <h:form id="deleteForm">
                 <p:outputLabel value="Se eliminará el siguiente registro:"/>
 
                 <p:dataTable id="dtPefilesDel" var="perfilesDel" 
@@ -84,41 +138,11 @@ and open the template in the editor.
                     </p:column>
 
                     <f:facet name="footer">
-                        <p:commandButton value="Aceptar" action="#{accesosBean.eliminaAcceso()}"
+                        <p:commandButton value="Aceptar" action="#{perfilesBean.eliminarPerfil()}"
                                          oncomplete="PF('dlg3').hide()" icon="ui-icon-trash"
-                                         update=":mainFormPerfiles:dtPerfiles"/>
+                                         update=":mainFormPerfiles"/>
                     </f:facet>
                 </p:dataTable>
-            </p:dialog>
-        </h:form>
-
-        <p:dialog header="Nuevo Acceso" widgetVar="dlg" >
-            <h:form>
-                <h:panelGrid columns="2">
-                    <p:outputLabel value="Nombre"/>
-                    <p:inputText value="#{perfilesBean.perfil.nombrePerfil}"
-                                 />
-
-                    <p:outputLabel value="Descripción"/>
-                    <p:inputText value="#{perfilesBean.perfil.descripcion}"
-                                 />
-                </h:panelGrid>
-
-                <h3 style="margin-top: 0">Basic PickList</h3>
-                <p:pickList id="pickList" value="#{perfilesBean.listaAccesosDual}" var="accesosD" 
-                            itemLabel="#{accesosD.nombreAcceso}" itemValue="#{accesosD.idAcceso}" >
-                    <p:ajax event="transfer" listener="#{perfilesBean.onTransfer}" 
-                        update=":mainFormPerfiles:msjs2"/>
-                    
-                    <f:facet name="sourceCaption">Accesos</f:facet>
-                    <f:facet name="targetCaption">Accesos Seleccionados</f:facet>
-                    
-                </p:pickList>                        
-
-                <p:commandButton value="Guardar" action="#{perfilesBean.guardaPerfil()}"
-                                 oncomplete="PF('dlg').hide()" icon="ui-icon-disk"
-                                 update=":mainFormPerfiles:dtPerfiles :mainFormPerfiles:msjs2"/>
-
             </h:form>
         </p:dialog>
 

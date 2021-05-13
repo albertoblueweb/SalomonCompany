@@ -40,9 +40,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "SAccesos.findByFechaServidor", query = "SELECT s FROM SAccesos s WHERE s.fechaServidor = :fechaServidor"),
     @NamedQuery(name = "SAccesos.findByFechaBaja", query = "SELECT s FROM SAccesos s WHERE s.fechaBaja = :fechaBaja")})
 public class SAccesos implements Serializable {
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sAccesos")
-    private Collection<SPerfilesAccesos> sPerfilesAccesosCollection;
+
+    @OneToMany(mappedBy = "idAcceso")
+    private Collection<SAplicaciones> sAplicacionesCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -66,6 +66,8 @@ public class SAccesos implements Serializable {
     @Column(name = "FECHA_BAJA")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaBaja;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sAccesos")
+    private Collection<SPerfilesAccesos> sPerfilesAccesosCollection;
 
     public SAccesos() {
     }
@@ -130,6 +132,15 @@ public class SAccesos implements Serializable {
         this.fechaBaja = fechaBaja;
     }
 
+    @XmlTransient
+    public Collection<SPerfilesAccesos> getSPerfilesAccesosCollection() {
+        return sPerfilesAccesosCollection;
+    }
+
+    public void setSPerfilesAccesosCollection(Collection<SPerfilesAccesos> sPerfilesAccesosCollection) {
+        this.sPerfilesAccesosCollection = sPerfilesAccesosCollection;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -156,12 +167,12 @@ public class SAccesos implements Serializable {
     }
 
     @XmlTransient
-    public Collection<SPerfilesAccesos> getSPerfilesAccesosCollection() {
-        return sPerfilesAccesosCollection;
+    public Collection<SAplicaciones> getSAplicacionesCollection() {
+        return sAplicacionesCollection;
     }
 
-    public void setSPerfilesAccesosCollection(Collection<SPerfilesAccesos> sPerfilesAccesosCollection) {
-        this.sPerfilesAccesosCollection = sPerfilesAccesosCollection;
+    public void setSAplicacionesCollection(Collection<SAplicaciones> sAplicacionesCollection) {
+        this.sAplicacionesCollection = sAplicacionesCollection;
     }
     
 }

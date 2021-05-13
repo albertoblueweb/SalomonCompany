@@ -5,16 +5,20 @@
  */
 package controllers;
 
+import controllers.exceptions.IllegalOrphanException;
 import controllers.exceptions.NonexistentEntityException;
 import entidades.SPerfiles;
 import java.io.Serializable;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import entidades.SPerfilesAccesos;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import utils.LocalEntityManagerFactory;
 
 /**
@@ -26,7 +30,6 @@ public class SPerfilesJpaController implements Serializable {
     public SPerfilesJpaController() {
         this.emf = LocalEntityManagerFactory.getEntityManagerFactory();
     }
-    
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -34,11 +37,29 @@ public class SPerfilesJpaController implements Serializable {
     }
 
     public void create(SPerfiles SPerfiles) {
+        if (SPerfiles.getSPerfilesAccesosCollection() == null) {
+            SPerfiles.setSPerfilesAccesosCollection(new ArrayList<SPerfilesAccesos>());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Collection<SPerfilesAccesos> attachedSPerfilesAccesosCollection = new ArrayList<SPerfilesAccesos>();
+            for (SPerfilesAccesos SPerfilesAccesosCollectionSPerfilesAccesosToAttach : SPerfiles.getSPerfilesAccesosCollection()) {
+                SPerfilesAccesosCollectionSPerfilesAccesosToAttach = em.getReference(SPerfilesAccesosCollectionSPerfilesAccesosToAttach.getClass(), SPerfilesAccesosCollectionSPerfilesAccesosToAttach.getSPerfilesAccesosPK());
+                attachedSPerfilesAccesosCollection.add(SPerfilesAccesosCollectionSPerfilesAccesosToAttach);
+            }
+            SPerfiles.setSPerfilesAccesosCollection(attachedSPerfilesAccesosCollection);
             em.persist(SPerfiles);
+            for (SPerfilesAccesos SPerfilesAccesosCollectionSPerfilesAccesos : SPerfiles.getSPerfilesAccesosCollection()) {
+                SPerfiles oldSPerfilesOfSPerfilesAccesosCollectionSPerfilesAccesos = SPerfilesAccesosCollectionSPerfilesAccesos.getSPerfiles();
+                SPerfilesAccesosCollectionSPerfilesAccesos.setSPerfiles(SPerfiles);
+                SPerfilesAccesosCollectionSPerfilesAccesos = em.merge(SPerfilesAccesosCollectionSPerfilesAccesos);
+                if (oldSPerfilesOfSPerfilesAccesosCollectionSPerfilesAccesos != null) {
+                    oldSPerfilesOfSPerfilesAccesosCollectionSPerfilesAccesos.getSPerfilesAccesosCollection().remove(SPerfilesAccesosCollectionSPerfilesAccesos);
+                    oldSPerfilesOfSPerfilesAccesosCollectionSPerfilesAccesos = em.merge(oldSPerfilesOfSPerfilesAccesosCollectionSPerfilesAccesos);
+                }
+            }
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -47,12 +68,45 @@ public class SPerfilesJpaController implements Serializable {
         }
     }
 
-    public void edit(SPerfiles SPerfiles) throws NonexistentEntityException, Exception {
+    public void edit(SPerfiles SPerfiles) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            SPerfiles persistentSPerfiles = em.find(SPerfiles.class, SPerfiles.getIdPerfil());
+            Collection<SPerfilesAccesos> SPerfilesAccesosCollectionOld = persistentSPerfiles.getSPerfilesAccesosCollection();
+            Collection<SPerfilesAccesos> SPerfilesAccesosCollectionNew = SPerfiles.getSPerfilesAccesosCollection();
+            List<String> illegalOrphanMessages = null;
+            for (SPerfilesAccesos SPerfilesAccesosCollectionOldSPerfilesAccesos : SPerfilesAccesosCollectionOld) {
+                if (!SPerfilesAccesosCollectionNew.contains(SPerfilesAccesosCollectionOldSPerfilesAccesos)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain SPerfilesAccesos " + SPerfilesAccesosCollectionOldSPerfilesAccesos + " since its SPerfiles field is not nullable.");
+                }
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            Collection<SPerfilesAccesos> attachedSPerfilesAccesosCollectionNew = new ArrayList<SPerfilesAccesos>();
+            for (SPerfilesAccesos SPerfilesAccesosCollectionNewSPerfilesAccesosToAttach : SPerfilesAccesosCollectionNew) {
+                SPerfilesAccesosCollectionNewSPerfilesAccesosToAttach = em.getReference(SPerfilesAccesosCollectionNewSPerfilesAccesosToAttach.getClass(), SPerfilesAccesosCollectionNewSPerfilesAccesosToAttach.getSPerfilesAccesosPK());
+                attachedSPerfilesAccesosCollectionNew.add(SPerfilesAccesosCollectionNewSPerfilesAccesosToAttach);
+            }
+            SPerfilesAccesosCollectionNew = attachedSPerfilesAccesosCollectionNew;
+            SPerfiles.setSPerfilesAccesosCollection(SPerfilesAccesosCollectionNew);
             SPerfiles = em.merge(SPerfiles);
+            for (SPerfilesAccesos SPerfilesAccesosCollectionNewSPerfilesAccesos : SPerfilesAccesosCollectionNew) {
+                if (!SPerfilesAccesosCollectionOld.contains(SPerfilesAccesosCollectionNewSPerfilesAccesos)) {
+                    SPerfiles oldSPerfilesOfSPerfilesAccesosCollectionNewSPerfilesAccesos = SPerfilesAccesosCollectionNewSPerfilesAccesos.getSPerfiles();
+                    SPerfilesAccesosCollectionNewSPerfilesAccesos.setSPerfiles(SPerfiles);
+                    SPerfilesAccesosCollectionNewSPerfilesAccesos = em.merge(SPerfilesAccesosCollectionNewSPerfilesAccesos);
+                    if (oldSPerfilesOfSPerfilesAccesosCollectionNewSPerfilesAccesos != null && !oldSPerfilesOfSPerfilesAccesosCollectionNewSPerfilesAccesos.equals(SPerfiles)) {
+                        oldSPerfilesOfSPerfilesAccesosCollectionNewSPerfilesAccesos.getSPerfilesAccesosCollection().remove(SPerfilesAccesosCollectionNewSPerfilesAccesos);
+                        oldSPerfilesOfSPerfilesAccesosCollectionNewSPerfilesAccesos = em.merge(oldSPerfilesOfSPerfilesAccesosCollectionNewSPerfilesAccesos);
+                    }
+                }
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -70,7 +124,7 @@ public class SPerfilesJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException {
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -81,6 +135,17 @@ public class SPerfilesJpaController implements Serializable {
                 SPerfiles.getIdPerfil();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The SPerfiles with id " + id + " no longer exists.", enfe);
+            }
+            List<String> illegalOrphanMessages = null;
+            Collection<SPerfilesAccesos> SPerfilesAccesosCollectionOrphanCheck = SPerfiles.getSPerfilesAccesosCollection();
+            for (SPerfilesAccesos SPerfilesAccesosCollectionOrphanCheckSPerfilesAccesos : SPerfilesAccesosCollectionOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This SPerfiles (" + SPerfiles + ") cannot be destroyed since the SPerfilesAccesos " + SPerfilesAccesosCollectionOrphanCheckSPerfilesAccesos + " in its SPerfilesAccesosCollection field has a non-nullable SPerfiles field.");
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
             }
             em.remove(SPerfiles);
             em.getTransaction().commit();

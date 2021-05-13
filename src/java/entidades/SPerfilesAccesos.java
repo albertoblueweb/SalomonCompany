@@ -31,6 +31,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "SPerfilesAccesos.findAll", query = "SELECT s FROM SPerfilesAccesos s"),
     @NamedQuery(name = "SPerfilesAccesos.findByIdPerfil", query = "SELECT s FROM SPerfilesAccesos s WHERE s.sPerfilesAccesosPK.idPerfil = :idPerfil"),
     @NamedQuery(name = "SPerfilesAccesos.findByIdAcceso", query = "SELECT s FROM SPerfilesAccesos s WHERE s.sPerfilesAccesosPK.idAcceso = :idAcceso"),
+    @NamedQuery(name = "SPerfilesAccesos.findByIdPerfilAndAcceso", 
+            query = "SELECT s FROM SPerfilesAccesos s WHERE s.sPerfilesAccesosPK.idPerfil = :idPerfil "
+                    + "AND s.sPerfilesAccesosPK.idAcceso = :idAcceso"),
     @NamedQuery(name = "SPerfilesAccesos.findByFechaServidor", query = "SELECT s FROM SPerfilesAccesos s WHERE s.fechaServidor = :fechaServidor"),
     @NamedQuery(name = "SPerfilesAccesos.findByIdUsuarioModifica", query = "SELECT s FROM SPerfilesAccesos s WHERE s.idUsuarioModifica = :idUsuarioModifica")})
 public class SPerfilesAccesos implements Serializable {
