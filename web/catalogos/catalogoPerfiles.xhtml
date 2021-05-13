@@ -17,19 +17,28 @@ and open the template in the editor.
         <h:form id="mainFormPerfiles">
             <p:growl id="msjs2" showDetail="true"/>
             <p:dataTable id="dtPerfiles" var="perfiles" value="#{perfilesBean.listaPerfiles}" 
-                         selectionMode="single"
+                         selectionMode="single" widgetVar="perfilesTable"
                          selection="#{perfilesBean.selectedPerfil}" 
                          rowKey="#{perfiles.idPerfil}" paginator="true" rows="10">
 
-                <p:column headerText="Nombre">
+                <p:column headerText="Nombre" filterBy="#{perfiles.nombrePerfil}"
+                          sortBy="#{perfiles.nombrePerfil}">
                     <h:outputText value="#{perfiles.nombrePerfil}" />
                 </p:column>
 
-                <p:column headerText="Descripción">
+                <p:column headerText="Descripción" filterBy="#{perfiles.descripcion}"
+                          sortBy="#{perfiles.descripcion}">
                     <h:outputText value="#{perfiles.descripcion}" />
                 </p:column>
 
-                <p:column headerText="Estatus">
+                <p:column headerText="Estatus" filterBy="#{perfiles.activo}">
+                    <f:facet name="filter">
+                        <p:selectOneMenu onchange="PF('perfilesTable').filter()" style="width: 95%">
+                            <f:selectItem itemLabel="Todos" itemValue="#{null}" noSelectionOption="true" />
+                            <f:selectItem itemLabel="Activo" itemValue="#{true}"/>
+                            <f:selectItem itemLabel="Inactivo" itemValue="#{false}"/>
+                        </p:selectOneMenu>
+                    </f:facet>
                     <h:outputText value="#{perfiles.activo == true? 'Activo' : 'Inactivo'}" />
                 </p:column>
 

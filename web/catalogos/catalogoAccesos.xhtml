@@ -17,19 +17,28 @@ and open the template in the editor.
         <h:form id="mainForm">
             <p:growl id="msjs" showDetail="true"/>
             <p:dataTable id="dtAccesos" var="accesos" value="#{accesosBean.listaAccesos}" 
-                         selectionMode="single"
+                         selectionMode="single" widgetVar="accesosTable"
                          selection="#{accesosBean.selectedAcceso}" 
                          rowKey="#{accesos.idAcceso}" paginator="true" rows="10">
 
-                <p:column headerText="Nombre">
+                <p:column headerText="Nombre" filterBy="#{accesos.nombreAcceso}"
+                          sortBy="#{accesos.nombreAcceso}">
                     <h:outputText value="#{accesos.nombreAcceso}" />
                 </p:column>
 
-                <p:column headerText="Orden">
+                <p:column headerText="Orden" filterBy="#{accesos.orden}"
+                          sortBy="#{accesos.orden}">
                     <h:outputText value="#{accesos.orden}" />
                 </p:column>
 
-                <p:column headerText="Estatus">
+                <p:column headerText="Estatus" filterBy="#{accesos.activo}">
+                    <f:facet name="filter">
+                        <p:selectOneMenu onchange="PF('accesosTable').filter()" style="width: 95%">
+                            <f:selectItem itemLabel="Todos" itemValue="#{null}" noSelectionOption="true" />
+                            <f:selectItem itemLabel="Activo" itemValue="#{true}"/>
+                            <f:selectItem itemLabel="Inactivo" itemValue="#{false}"/>
+                        </p:selectOneMenu>
+                    </f:facet>
                     <h:outputText value="#{accesos.activo == true? 'Activo' : 'Inactivo'}" />
                 </p:column>
 
@@ -61,7 +70,7 @@ and open the template in the editor.
                     <p:outputLabel value="Orden"/>
                     <p:inputNumber value="#{accesosBean.acceso.orden}"
                                    maxValue="100000" minValue="0" required="true"
-                                 requiredMessage="Ingrese orden"/>
+                                   requiredMessage="Ingrese orden"/>
                 </h:panelGrid>
 
                 <p:commandButton value="Guardar" action="#{accesosBean.guardaAcceso()}"
