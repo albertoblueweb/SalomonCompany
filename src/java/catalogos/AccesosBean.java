@@ -36,7 +36,7 @@ public class AccesosBean implements Serializable {
     }
 
     /**
-     * Mediante el controller de la tablas SAccesos llama a todas las entidades
+     * Mediante el controller de la tabla SAccesos llama a todas las entidades
      * generadas mediante la consulta de la tabla
      */
     public final void llenaAccesos() {

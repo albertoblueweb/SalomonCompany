@@ -43,6 +43,9 @@ public class MenuBean implements Serializable {
             case 6:
                 opcion = "/catalogos/catalogoPerfiles.xhtml";
                 break;
+            case 7:
+                opcion = "/catalogos/reporteClientes.xhtml";
+                break;
             default:
                 opcion = "/index.xhtml";
                 break;

@@ -8,13 +8,17 @@ package controllers;
 import controllers.exceptions.NonexistentEntityException;
 import entidades.SUsuarios;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import objetos.ReporteCliente;
 import utils.LocalEntityManagerFactory;
 
 /**
@@ -23,10 +27,12 @@ import utils.LocalEntityManagerFactory;
  */
 public class SUsuariosJpaController implements Serializable {
 
+    List<ReporteCliente> lista = new ArrayList<>();
+
     public SUsuariosJpaController() {
         this.emf = LocalEntityManagerFactory.getEntityManagerFactory();
     }
-    
+
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -136,5 +142,45 @@ public class SUsuariosJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    /**
+     *
+     * @param idUsuario
+     * @return
+     */
+    public List<ReporteCliente> traerClientes(int idUsuario) {
+        lista = new ArrayList<>();
+        List<Object[]> resultList= new ArrayList<>(); 
+        EntityManager em = getEntityManager();
+        try {
+            em = getEntityManager();
+            StoredProcedureQuery query = em.createStoredProcedureQuery("stp_SelectCClientesSalomon")
+                    .registerStoredProcedureParameter(1, Integer.class,
+                            ParameterMode.IN)
+                    .setParameter(1, idUsuario);
+
+            query.execute();
+
+            resultList = query.getResultList();
+            for (Object[] item : resultList){
+                ReporteCliente reporteCliente = new ReporteCliente();
+                reporteCliente.setNumCliente(item[0].toString());
+                reporteCliente.setNombreCliente(item[1].toString());
+                reporteCliente.setTelContacto(item[2].toString());
+                reporteCliente.setNombreDistribuidor(item[3].toString());
+                reporteCliente.setDescripcionCiudad(item[4].toString());
+                reporteCliente.setNombreUsuarioModifica(item[5].toString());
+                lista.add(reporteCliente);
+            }
+            
+        } catch (Exception ex) {
+
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return lista;
+
+    }
 }
