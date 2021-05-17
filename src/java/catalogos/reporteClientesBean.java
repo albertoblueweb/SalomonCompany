@@ -35,8 +35,9 @@ public class ReporteClientesBean implements Serializable {
     }
 
     /**
-     * Mediante el controller de usuario, utilza la función traerClientes, para
-     * generadas mediante la consulta de la tablaregresar los clientes
+     * Mediante el controller de usuario, utilza la función traerClientes para
+     * buscar los datos del cliente segun el usuario modifica, y luego
+     * llenar la listaCLientes y mostrarla
      * modificados por el usuario ingresado
      */
     public final void llenaReporteClientes() {
