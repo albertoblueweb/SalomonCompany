@@ -8,6 +8,7 @@
     <class>entidades.SAccesos</class>
     <class>entidades.SPerfiles</class>
     <class>entidades.SPerfilesAccesos</class>
+    <class>entidades.HActivacion</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
     <properties>

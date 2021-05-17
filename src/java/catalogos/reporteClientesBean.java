@@ -12,8 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import objetos.ReporteCliente;
 
 /**
@@ -22,26 +24,30 @@ import objetos.ReporteCliente;
  */
 @ManagedBean
 @SessionScoped
-public class reporteClientesBean implements Serializable {
+public class ReporteClientesBean implements Serializable {
+
     private List<ReporteCliente> listaClientes;
     private SUsuarios usuario = new SUsuarios();
     SUsuariosJpaController usuariosController = new SUsuariosJpaController();
 
-    public reporteClientesBean() {
+    public ReporteClientesBean() {
         this.listaClientes = new ArrayList<>();
     }
 
-    /**  
-     * Mediante el controller de uausario, utilza la función traerClientes, para
-     * generadas mediante la consulta de la tablaregresar los clientes modificados 
-     * por el usuario ingresado
+    /**
+     * Mediante el controller de usuario, utilza la función traerClientes, para
+     * generadas mediante la consulta de la tablaregresar los clientes
+     * modificados por el usuario ingresado
      */
     public final void llenaReporteClientes() {
         try {
             listaClientes = usuariosController.traerClientes(usuario.getIdUsuario());
-
+            FacesMessage msg;
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Consulta exitosa", 
+                    usuario.getNombreUsuario());
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         } catch (Exception ex) {
-            Logger.getLogger(AccesosBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ReporteClientesBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -59,7 +65,6 @@ public class reporteClientesBean implements Serializable {
 
     public void setUsuario(SUsuarios usuario) {
         this.usuario = usuario;
-    } 
-    
-    
+    }
+
 }

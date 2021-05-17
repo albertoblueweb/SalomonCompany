@@ -21,17 +21,18 @@ and open the template in the editor.
                 <f:facet name="header">
                     <div align="center">
                         <p:outputLabel value="Buscar registros modificados por usuario"/>
-                        
+
                         <br/>
                         <p:outputLabel value="Id Usuario:" style="margin-top: 5px"/>
                         <p:inputNumber value="#{reporteClientesBean.usuario.idUsuario}"
-                                   maxValue="100000" minValue="0" required="true"
-                                   requiredMessage="Ingrese Id Usuario" decimalPlaces="0" />
-                        
+                                       maxValue="100000" minValue="0" required="true"
+                                       requiredMessage="Ingrese Id Usuario" decimalPlaces="0" 
+                                       style="margin-left: 5px"/>
+
                         <p:commandButton value="Buscar" action="#{reporteClientesBean.llenaReporteClientes()}"
                                          icon="ui-icon-disk" style="margin-top: 5px;
                                          margin-bottom: 5px; margin-left: 5px"
-                                 update=":formReport:tableClientes :formReport:msgsR"/>
+                                         update=":formReport:tableClientes :formReport:msgsR"/>
                     </div>
                 </f:facet>
 

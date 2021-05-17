@@ -35,9 +35,16 @@ and open the template in the editor.
                 <p:menuitem value="Perfiles" icon="ui-icon-key" 
                             action="#{menuBean.seleccionMenu(6)}" 
                             update="panelCenter" />
-                
-                <p:menuitem value="Reporte clientes" icon="ui-icon-key" 
+                                
+            </p:submenu>
+            
+            <p:submenu label="Reportes">
+                <p:menuitem value="Reporte clientes" icon="ui-icon-note" 
                             action="#{menuBean.seleccionMenu(7)}" 
+                            update="panelCenter" />
+                
+                <p:menuitem value="Reporte activación" icon="ui-icon-contact" 
+                            action="#{menuBean.seleccionMenu(8)}" 
                             update="panelCenter" />
             </p:submenu>
             
