@@ -27,16 +27,18 @@ and open the template in the editor.
                         <p:outputLabel for="fechaInicial" value="Fecha inicial: " />
                         <p:datePicker id="fechaInicial" value="#{reporteActivacionBean.fechaInicial}" showIcon="true" 
                                       monthNavigator="true" yearNavigator="true"
-                                      pattern="dd/MM/yyyy"/>
+                                      pattern="dd/MM/yyyy" required="true"
+                                      requiredMessage="Ingrese fecha de inicio"/>
 
                         <p:outputLabel for="fechaFinal" value="Fecha Final: " 
                                        style="margin-left: 10px" />
                         <p:datePicker id="fechaFinal" value="#{reporteActivacionBean.fechaFinal}" showIcon="true" 
                                       monthNavigator="true" yearNavigator="true"
-                                      pattern="dd/MM/yyyy"/>
+                                      pattern="dd/MM/yyyy" required="true"
+                                      requiredMessage="Ingrese fecha final"/>
 
                         <p:commandButton value="Buscar" action="#{reporteActivacionBean.llenaReporteActivacion()}"
-                                         icon="ui-icon-disk" style="margin-top: 5px;
+                                         icon="ui-icon-search" style="margin-top: 5px;
                                          margin-bottom: 5px; margin-left: 10px"
                                          update=":formReportAct:tableActivacion 
                                          :formReportAct:msgsAct"/>
