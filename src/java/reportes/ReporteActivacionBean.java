@@ -58,7 +58,7 @@ public class ReporteActivacionBean implements Serializable {
             if (fechaInicial.before(fechaFinal) || fechaInicial.equals(fechaFinal)) {
                 Calendar tmp = Calendar.getInstance();
                 tmp.setTime(fechaFinal);
-                tmp.add(Calendar.DAY_OF_MONTH, 1);
+                tmp.add(Calendar.HOUR, 10);
                 fechaFinal = tmp.getTime();
 
                 listaActivacion = activacionController.traerListaPeticion(fechaInicial, fechaFinal);
