@@ -58,7 +58,7 @@ and open the template in the editor.
 
             <p:layoutUnit position="west" size="250">
                 <h:form>
-                    <ui:include src="/menu/menu.xhtml"/>
+                    <ui:include src="/menu/menuDinamico.xhtml"/>
                 </h:form>    
             </p:layoutUnit>
 
@@ -67,9 +67,9 @@ and open the template in the editor.
             </p:layoutUnit>
 
             <p:layoutUnit position="center" >
-                <p:panel id="panelCenter" styleClass="over col">
-                    <ui:include src="#{menuBean.opcion}"/>
-                </p:panel>
+                <ui:insert name="center">
+                    
+                </ui:insert>
             </p:layoutUnit>
         </p:layout>
 

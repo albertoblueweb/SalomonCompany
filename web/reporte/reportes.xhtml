@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Reporte Clientes</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="./../plantilla/plantilla.xhtml">
+            <ui:define name="center">
+                <h:form id="formReport">
+                    <p:growl id="msgsR" showDetail="true"/>
+
+                    <p:dataTable id="tableClientes" var="clienteR" value="#{reporteClientesBean.listaClientes}" 
+                                 paginator="true" rows="10" sortMode="single" widgetVar="clientesTabla" >
+                        <f:facet name="header">
+                            <div align="center">
+                                <p:outputLabel value="Buscar registros modificados por usuario"/>
+
+                                <br/>
+                                <p:outputLabel value="Id Usuario:" style="margin-top: 5px"/>
+                                <p:inputNumber value="#{reporteClientesBean.usuario.idUsuario}"
+                                               maxValue="100000" minValue="0" required="true"
+                                               requiredMessage="Ingrese Id Usuario" decimalPlaces="0" 
+                                               style="margin-left: 5px" rendered="true"/>
+
+                                <p:commandButton value="Buscar" action="#{reporteClientesBean.llenaReporteClientes()}"
+                                                 icon="ui-icon-search" style="margin-top: 5px;
+                                                 margin-bottom: 5px; margin-left: 5px"
+                                                 update=":formReport:tableClientes :formReport:msgsR"/>
+                            </div>
+                        </f:facet>
+
+                        <p:column headerText="Número cliente" sortBy="#{clienteR.numCliente}" 
+                                  filterBy="#{clienteR.numCliente}">
+                            <h:outputText value="#{clienteR.numCliente}" />
+                        </p:column>
+
+                        <p:column headerText="Nombre cliente" sortBy="#{clienteR.nombreCliente}" 
+                                  filterBy="#{clienteR.nombreCliente}">
+                            <h:outputText value="#{clienteR.nombreCliente}" />
+                        </p:column>
+
+                        <p:column headerText="Nombre distribuidor" sortBy="#{clienteR.nombreDistribuidor}" 
+                                  filterBy="#{clienteR.nombreDistribuidor}">
+                            <h:outputText value="#{clienteR.nombreDistribuidor}" />
+                        </p:column>
+
+                        <p:column headerText="Ciudad" sortBy="#{clienteR.descripcionCiudad}" 
+                                  filterBy="#{clienteR.descripcionCiudad}">
+                            <h:outputText value="#{clienteR.descripcionCiudad}" />
+                        </p:column>
+
+                        <p:column headerText="Teléfono contacto" sortBy="#{clienteR.telContacto}" 
+                                  filterBy="#{clienteR.telContacto}">
+                            <h:outputText value="#{clienteR.telContacto}" />
+                        </p:column>                
+
+                        <p:column headerText="Nombre usuario" sortBy="#{clienteR.nombreUsuarioModifica}" 
+                                  filterBy="#{clienteR.nombreUsuarioModifica}">
+                            <h:outputText value="#{clienteR.nombreUsuarioModifica}" />
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

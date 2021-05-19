@@ -22,7 +22,7 @@ import utils.LocalEntityManagerFactory;
  * @author Blueweb
  */
 public class SModulosJpaController implements Serializable {
-
+    
     public SModulosJpaController() {
         this.emf = LocalEntityManagerFactory.getEntityManagerFactory();
     }

@@ -8,20 +8,26 @@ package controllers;
 import controllers.exceptions.NonexistentEntityException;
 import entidades.SAplicaciones;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import utils.LocalEntityManagerFactory;
+import utils.TraeDatoSesion;
 
 /**
  *
  * @author Blueweb
  */
 public class SAplicacionesJpaController implements Serializable {
+    
+    List<SAplicaciones> lista;
 
     public SAplicacionesJpaController() {
         this.emf = LocalEntityManagerFactory.getEntityManagerFactory();
@@ -137,4 +143,38 @@ public class SAplicacionesJpaController implements Serializable {
         }
     }
     
+    public List<SAplicaciones> traerAplicacion() {
+        lista = new ArrayList<>();
+        List<Object[]> resultList= new ArrayList<>(); 
+        EntityManager em = getEntityManager();
+        try {
+            em = getEntityManager();
+            StoredProcedureQuery query = em.createStoredProcedureQuery("stp_CargaMenu")
+                    .registerStoredProcedureParameter(1, String.class,
+                            ParameterMode.IN)
+                    .setParameter(1, TraeDatoSesion.traerUsuario());
+
+            query.execute();
+
+            resultList = query.getResultList();
+            for (Object[] item : resultList){
+                SAplicaciones aplicacion = new SAplicaciones();
+                aplicacion.setIdAplicacion(Integer.parseInt(item[0].toString()));
+                aplicacion.setNombreAplicacion(item[1].toString());
+                aplicacion.setIcono(item[2].toString());
+                aplicacion.setUrl(item[3].toString());
+                aplicacion.setOrden(Short.valueOf(item[4].toString()));
+                lista.add(aplicacion);
+            }
+            
+        } catch (Exception ex) {
+
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return lista;
+
+    }
 }
